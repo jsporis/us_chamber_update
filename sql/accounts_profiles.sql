@@ -1,5 +1,6 @@
 SELECT
 sum((CASE WHEN cu.uuid is not null then 1 else 0 end)) total_accounts,
+sum((CASE WHEN cs.uuid is null and re.uuid is null and vjs.uuid is null and erm.uuid is null then 1 else 0 end)) dashboard_only,
 sum((CASE WHEN cs.uuid is not null then 1 else 0 end)) cs_profiles,
 sum((CASE WHEN re.uuid is not null then 1 else 0 end)) re_profiles,
 sum((CASE WHEN vjs.uuid is not null then 1 else 0 end)) vjs_profiles,
