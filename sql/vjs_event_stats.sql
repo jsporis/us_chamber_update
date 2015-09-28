@@ -48,9 +48,7 @@ LEFT JOIN
 		SELECT
 
 		event_id,
-		sum((CASE when message like '%joined%' then 1 else 0 end)) joined,
-		sum((CASE when message like '%employer connect%' then 1 else 0 end)) employer_connections,
-		sum((CASE when message like '%Seeker inqu%' then 1 else 0 end)) seeker_inquiry
+		sum((CASE when message like '%employer connect%' then 1 else 0 end)) employer_connections
 
 
 		FROM realign_vjs.event_activity_logs el
@@ -60,6 +58,22 @@ LEFT JOIN
 		group by event_id
 
 ) a on e.id=a.event_id
+
+LEFT JOIN
+(
+		SELECT 
+
+		e.id, count(*) as seeker_inquiry
+
+		FROM realign_vjs.inquiries i
+
+		INNER JOIN realign_vjs.events e on i.createdAt >= e.start_date and i.createdAt <= e.end_date
+		left join realign_vjs.user vu on i.userProfile_id=vu.profile_id
+		INNER JOIN Reporting_chamber.chamber_users cu on cu.uuid=vu.uuid
+
+		group by e.id
+
+		) inq on e.id=inq.id
 
 LEFT JOIN
 (
@@ -83,4 +97,4 @@ LEFT JOIN
 		group by event_id
 ) s on e.id=s.event_id
 
-ORDER BY START desc
+ORDER BY START DESC
