@@ -2,7 +2,7 @@
 
 shinyServer(function(input, output, session) {
 
-  start <- Sys.time()
+  
   source("data_load/set_up.R")
   source("data_load/db_user_update.R")
   source("data_load/ga_data_load.R")
@@ -12,9 +12,7 @@ shinyServer(function(input, output, session) {
   source("data_load/db_resume_engine_load.R")
   source("data_load/db_overview_load.R")
   source("data_load/overlap.R")
-end <- Sys.time()
-end-start
-  
+
 output$cTime <- renderText(Sys.time())
 
 ## OVERALL STATS
@@ -27,6 +25,13 @@ output$profiles <- renderDataTable(
   accountsProfiles, options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
+output$profilePlot <- renderPlot({
+  print(chartProfile)
+})
+
+output$rolePlot <- renderPlot({
+  print(chartRoles)
+})
 
 output$signupPlot <- renderPlot({
   print(signupDaily)
@@ -48,7 +53,7 @@ output$overlap <- renderPlot({
 ## GA DATA
 
 output$gaStats <- renderDataTable( 
-  ga_overall_stats[,c('ACCOUNT_NAME','start-date','end-date','users','sessions','pageviews','pageviewsPerSession','avgSessionDuration','mobileSessions')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_overall_stats[,c('ACCOUNT_NAME','START-DATE','END-DATE','USERS','SESSIONS','PAGEVIEWS','PAGEVIEWSPERSESSION','AVGSESSIONDURATION','MOBILESESSIONS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$gaDailyPlot <- renderPlot({
@@ -61,9 +66,9 @@ output$reStats <- renderDataTable(
   re_resume_stats, options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
-output$reCompletion <- renderDataTable( 
-  re_resume_completion, options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
-)
+output$reCompletionPlot <-renderPlot({
+  print(chartREcomplete)
+})
 
 output$reBizSummary <- renderDataTable( 
   re_biz_stats_summary, options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
@@ -78,7 +83,7 @@ output$reBizStatsActive <- renderDataTable(
 )
 
 output$reBizList <- renderDataTable( 
-  re_business_list, options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  re_business_list, options = list(bFilter = TRUE, bPaginate = TRUE, bAutoWidth = TRUE, pageLength=10)
 )
 
 ## EMPLOYER ROAD MAP
@@ -101,9 +106,9 @@ output$csStats <- renderDataTable(
   cs_resume_stats, options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
-output$csCompletion <- renderDataTable( 
-  cs_resume_completion, options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
-)
+output$csCompletionPlot <-renderPlot({
+  print(chartCScomplete)
+})
 
 ### VJS
 output$vjsStats <- renderDataTable( 
@@ -116,78 +121,78 @@ output$vjsEventsStats <- renderDataTable(
 
 #### ga page path --------
 output$pagesRE <- renderDataTable( 
-  ga_pages[ga_pages$ACCOUNT_NAME=='RESUME ENGINE', c('pagePath','pageviews')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_pages[ga_pages$ACCOUNT_NAME=='RESUME ENGINE', c('PAGEPATH','PAGEVIEWS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$pagesCS <- renderDataTable( 
-  ga_pages[ga_pages$ACCOUNT_NAME=='CAREER SPARK', c('pagePath','pageviews')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_pages[ga_pages$ACCOUNT_NAME=='CAREER SPARK', c('PAGEPATH','PAGEVIEWS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$pagesAVS <- renderDataTable( 
-  ga_pages[ga_pages$ACCOUNT_NAME=='ALL*VET STATES', c('pagePath','pageviews')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_pages[ga_pages$ACCOUNT_NAME=='ALL*VET STATES', c('PAGEPATH','PAGEVIEWS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$pagesVJS <- renderDataTable( 
-  ga_pages[ga_pages$ACCOUNT_NAME=='VIRTUAL JOB SCOUT', c('pagePath','pageviews')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_pages[ga_pages$ACCOUNT_NAME=='VIRTUAL JOB SCOUT', c('PAGEPATH','PAGEVIEWS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$pagesERM <- renderDataTable( 
-  ga_pages[ga_pages$ACCOUNT_NAME=='EMPLOYER ROAD MAP', c('pagePath','pageviews')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_pages[ga_pages$ACCOUNT_NAME=='EMPLOYER ROAD MAP', c('PAGEPATH','PAGEVIEWS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$pagesFT <- renderDataTable( 
-  ga_pages[ga_pages$ACCOUNT_NAME=='FAST TRACK', c('pagePath','pageviews')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_pages[ga_pages$ACCOUNT_NAME=='FAST TRACK', c('PAGEPATH','PAGEVIEWS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 
 #### ga sources path --------
 output$sourcesRE <- renderDataTable( 
-  ga_sources[ga_sources$ACCOUNT_NAME=='RESUME ENGINE', c('sourceMedium','sessions')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_sources[ga_sources$ACCOUNT_NAME=='RESUME ENGINE', c('SOURCEMEDIUM','SESSIONS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$sourcesCS <- renderDataTable( 
-  ga_sources[ga_sources$ACCOUNT_NAME=='CAREER SPARK', c('sourceMedium','sessions')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_sources[ga_sources$ACCOUNT_NAME=='CAREER SPARK', c('SOURCEMEDIUM','SESSIONS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$sourcesAVS <- renderDataTable( 
-  ga_sources[ga_sources$ACCOUNT_NAME=='ALL*VET STATES', c('sourceMedium','sessions')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_sources[ga_sources$ACCOUNT_NAME=='ALL*VET STATES', c('SOURCEMEDIUM','SESSIONS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$sourcesVJS <- renderDataTable( 
-  ga_sources[ga_sources$ACCOUNT_NAME=='VIRTUAL JOB SCOUT', c('sourceMedium','sessions')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_sources[ga_sources$ACCOUNT_NAME=='VIRTUAL JOB SCOUT', c('SOURCEMEDIUM','SESSIONS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$sourcesERM <- renderDataTable( 
-  ga_sources[ga_sources$ACCOUNT_NAME=='EMPLOYER ROAD MAP', c('sourceMedium','sessions')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_sources[ga_sources$ACCOUNT_NAME=='EMPLOYER ROAD MAP', c('SOURCEMEDIUM','SESSIONS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$sourcesFT <- renderDataTable( 
-  ga_sources[ga_sources$ACCOUNT_NAME=='FAST TRACK', c('sourceMedium','sessions')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_sources[ga_sources$ACCOUNT_NAME=='FAST TRACK', c('SOURCEMEDIUM','SESSIONS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 #### ga states --------
 output$statesRE <- renderDataTable( 
-  ga_states[ga_states$ACCOUNT_NAME=='RESUME ENGINE', c('region','sessions')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_states[ga_states$ACCOUNT_NAME=='RESUME ENGINE', c('REGION','SESSIONS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$statesCS <- renderDataTable( 
-  ga_states[ga_states$ACCOUNT_NAME=='CAREER SPARK', c('region','sessions')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_states[ga_states$ACCOUNT_NAME=='CAREER SPARK', c('REGION','SESSIONS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$statesAVS <- renderDataTable( 
-  ga_states[ga_states$ACCOUNT_NAME=='ALL*VET STATES', c('region','sessions')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_states[ga_states$ACCOUNT_NAME=='ALL*VET STATES', c('REGION','SESSIONS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$statesVJS <- renderDataTable( 
-  ga_states[ga_states$ACCOUNT_NAME=='VIRTUAL JOB SCOUT', c('region','sessions')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_states[ga_states$ACCOUNT_NAME=='VIRTUAL JOB SCOUT', c('REGION','SESSIONS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$statesERM <- renderDataTable( 
-  ga_states[ga_states$ACCOUNT_NAME=='EMPLOYER ROAD MAP', c('region','sessions')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_states[ga_states$ACCOUNT_NAME=='EMPLOYER ROAD MAP', c('REGION','SESSIONS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 output$statesFT <- renderDataTable( 
-  ga_states[ga_states$ACCOUNT_NAME=='FAST TRACK', c('region','sessions')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
+  ga_states[ga_states$ACCOUNT_NAME=='FAST TRACK', c('REGION','SESSIONS')], options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
 

@@ -22,3 +22,17 @@ erm_summary <- erm_article_stats %>%
 
 erm_summary <- cbind(erm_summary,shares=ermShares, prints=ermPrint)
 
+
+## FINAL TWEAKS FOR DISPLAY
+
+erm_article_stats$object_nid <- NULL
+colnames(erm_article_stats) <- toupper(colnames(erm_article_stats))
+
+
+erm_summary$name <- 'name'
+erm_summary <- melt(erm_summary, id='name')
+erm_summary$name <- NULL
+colnames(erm_summary) <- toupper(colnames(erm_summary))
+erm_summary$VARIABLE <- toupper(erm_summary$VARIABLE)
+
+colnames(erm_article_comments) <- toupper(colnames(erm_article_comments))

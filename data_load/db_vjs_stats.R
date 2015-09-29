@@ -10,3 +10,9 @@ vjs_overall_stats <- RJDBC::dbGetQuery(conn,queryVJSStats)
 
 
 
+vjs_overall_stats <- melt(vjs_overall_stats)
+vjs_overall_stats$value <- format(vjs_overall_stats$value, big.mark=',')
+vjs_overall_stats$value <- gsub('.00','', vjs_overall_stats$value)
+colnames(vjs_overall_stats) <- toupper(colnames(vjs_overall_stats))
+
+colnames(vjs_event_stats) <- toupper(colnames(vjs_event_stats))

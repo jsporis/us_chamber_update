@@ -38,6 +38,32 @@ date_30 <- Sys.Date()-30
 #date_week_prior <- as.character(Sys.Date()-7)
 
 
+## COLORS
+
+colorDash <- '#39ABA8'
+colorRE <- '#0572AA'
+colorVJS <- '#48A465'
+colorCS <- '#11A8AB'
+colorERM <- '#21CAA4'
+colorFT <- '#164350'
+colorAVS <- '#5680BB'
+colorTot <- '#325481'
+
+##CHART THEME
+chartTheme <-  theme(
+    text=element_text(color="#1A2D2E"),
+    axis.line=element_blank(),
+    axis.ticks=element_blank(),
+    axis.title.y=element_blank(),
+    axis.text.y=element_text(size = 10),
+    axis.text.x=element_text(size = 12,  angle=90),
+    axis.title.x=element_blank(),
+    legend.position="top",
+    legend.text=element_text(size = 10),
+    legend.title=element_blank(),
+    panel.border=element_blank(),
+    panel.background=element_blank(),
+    plot.background=element_blank())
 
 
 

@@ -13,7 +13,21 @@ re_resume_stats$percent_90_number <- sum(re_resume_completion$re_resumes[re_resu
 re_resume_stats$percent_90 <- percent(re_resume_stats$percent_90_number/re_resume_stats$re_resumes)
 re_resume_stats$percent_searchable <- percent(re_resume_stats$re_resumes_searchable/re_resume_stats$re_resumes)
 
+re_resume_stats$re_resumes <- format(re_resume_stats$re_resumes, big.mark=',')
+re_resume_stats$re_resumes_searchable <- format(re_resume_stats$re_resumes_searchable, big.mark=',')
+re_resume_stats$percent_90_number <- format(re_resume_stats$percent_90_number, big.mark=',')
 
+re_resume_stats$name <- 'name'
+re_resume_stats <- melt(re_resume_stats, id = 'name')
+re_resume_stats$name <- NULL
+colnames(re_resume_stats) <- toupper(colnames(re_resume_stats))
+re_resume_stats$VARIABLE <- toupper(re_resume_stats$VARIABLE)
+
+chartREcomplete <- ggplot(data=re_resume_completion, aes(x=factor(percent_complete), y=re_resumes)) + 
+                      geom_bar(stat='identity', fill='#E0F0E9') + 
+                      geom_text(aes(label = re_resumes),  position=position_dodge(width=0.7), vjust = -1, size = 4, color = "#1A2D2E") +
+                      scale_y_continuous(limit=c(0,max(re_resume_completion$re_resumes)*1.1)) +
+                      chartTheme
 
 
 ### BUSINESS STATS
@@ -28,6 +42,7 @@ re_biz_stats[is.na(re_biz_stats)] <- 0
 queryREbusinessList <- paste0(readLines('./sql/re_business_list.sql', warn=FALSE), collapse=' ')
 re_business_list <- RJDBC::dbGetQuery(conn,queryREbusinessList)
 
+colnames(re_business_list) <- toupper(colnames(re_business_list))
 
 re_statistic_all_business <- melt(re_biz_stats[,c('downloads','resume_email','resume_preview','total_searches')]) %>% 
                               group_by(variable) %>% 
@@ -40,6 +55,8 @@ re_statistic_all_business <- melt(re_biz_stats[,c('downloads','resume_email','re
                                         mode=names(table(value))[table(value) == max(table(value))]
                                         )
 
+re_statistic_all_business$variable <- toupper(re_statistic_all_business$variable)
+colnames(re_statistic_all_business) <- toupper(colnames(re_statistic_all_business))
 
 re_statistic_active_business <- melt(re_biz_stats[,c('downloads','resume_email','resume_preview','total_searches')]) %>% 
                               group_by(variable) %>% 
@@ -51,7 +68,8 @@ re_statistic_active_business <- melt(re_biz_stats[,c('downloads','resume_email',
                                         max=max(value[value>0]),
                                         mode=names(table(value[value>0]))[table(value[value>0]) == max(table(value[value>0]))]
                                         )
-
+re_statistic_active_business$variable <- toupper(re_statistic_active_business$variable)
+colnames(re_statistic_active_business) <- toupper(colnames(re_statistic_active_business))
 
 re_biz_stats_summary <- re_biz_stats %>% 
                               summarize(
@@ -62,5 +80,10 @@ re_biz_stats_summary <- re_biz_stats %>%
                                         resume_downloads=sum(downloads),
                                         resume_emails=sum(resume_email)  
                                         )
+
+
+re_biz_stats_summary <- melt(re_biz_stats_summary)
+re_biz_stats_summary$variable <- toupper(re_biz_stats_summary$variable)
+colnames(re_biz_stats_summary) <- toupper(colnames(re_biz_stats_summary))
 
 rm(re_biz_stats, re_companies)

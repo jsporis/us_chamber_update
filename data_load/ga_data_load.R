@@ -20,6 +20,7 @@ ga_overall_stats <- ga_overall_stats %>%
                             avgSessionDuration=paste0(avgSessionDuration%/%60," minute(s) ",round(avgSessionDuration%%60),' seconds')
                             )
 
+
 ## GA REQUEST - ga_daily_session ------
 
 ga_daily_sessions <- gaRequest(
@@ -32,7 +33,7 @@ ga_daily_sessions <- gaRequest(
 ga_daily_sessions <- merge(x=ga_daily_sessions,y=acct_list,by.x='tableId',by.y="PROFILE_ID")
 ga_daily_sessions <- ga_daily_sessions %>% select(ACCOUNT_NAME,date,sessions) %>% mutate(date=as.Date(date,'%Y%m%d'))
 
-gaDaily <- ggplot(data=ga_daily_sessions, aes(x=date, y=sessions, group=ACCOUNT_NAME, color=ACCOUNT_NAME)) + geom_line()
+gaDaily <- ggplot(data=ga_daily_sessions, aes(x=date, y=sessions, group=ACCOUNT_NAME, color=ACCOUNT_NAME)) + geom_line(size=1.1) + chartTheme + scale_x_date(labels = date_format("%m/%d"), breaks=date_breaks("day"))
 
 ### GA REQUEST - MOBILE METRICS --------
 
@@ -128,4 +129,13 @@ ermPrint <- gaRequest(
   filters='ga:eventLabel=~^(/print/)'
 )$totalEvents
 
+
+## FINAL TWEAK
+
+colnames(ga_overall_stats) <- toupper(colnames(ga_overall_stats))
+ga_overall_stats$PAGEVIEWSPERSESSION <- round(ga_overall_stats$PAGEVIEWSPERSESSION,2)
+
+colnames(ga_pages) <- toupper(colnames(ga_pages))
+colnames(ga_sources) <- toupper(colnames(ga_sources))
+colnames(ga_states) <- toupper(colnames(ga_states))
 
