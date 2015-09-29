@@ -88,6 +88,7 @@ shinyUI(
                                                   ),
                                           hr(),
                                           fluidRow(id='label', 'BUSINESS LIST'),tags$br(),
+                                          downloadLink('downloadList', 'DOWNLOAD BUSINESS LIST CSV FILE'), tags$br(),
                                           dataTableOutput("reBizList")
                                           ),
                                  tabPanel(span(id='tab','Top Sources | Pages | States'),

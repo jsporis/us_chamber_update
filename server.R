@@ -86,6 +86,15 @@ output$reBizList <- renderDataTable(
   re_business_list, options = list(bFilter = TRUE, bPaginate = TRUE, bAutoWidth = TRUE, pageLength=10)
 )
 
+output$downloadList <- downloadHandler(
+  filename = function() {
+    paste('re_business_list', Sys.Date(), '.csv', sep="_")
+  },
+  content = function(file) {
+    write.csv(re_business_list, file)
+  }
+)
+
 ## EMPLOYER ROAD MAP
 
 output$ermSummary <- renderDataTable( 
@@ -118,6 +127,8 @@ output$vjsStats <- renderDataTable(
 output$vjsEventsStats <- renderDataTable( 
   vjs_event_stats, options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
+
+
 
 #### ga page path --------
 output$pagesRE <- renderDataTable( 
