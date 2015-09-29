@@ -88,7 +88,7 @@ shinyUI(
                                                   ),
                                           hr(),
                                           fluidRow(id='label', 'BUSINESS LIST'),tags$br(),
-                                          downloadLink('downloadList', 'DOWNLOAD BUSINESS LIST CSV FILE'), tags$br(),
+                                          downloadLink('downloadList', 'DOWNLOAD BUSINESS LIST CSV FILE'), tags$p(),
                                           dataTableOutput("reBizList")
                                           ),
                                  tabPanel(span(id='tab','Top Sources | Pages | States'),
@@ -113,11 +113,11 @@ shinyUI(
                                           tags$p(),
                                           fluidRow(
                                             column(4,
-                                                  fluidRow(id='label','RE OVERVIEW'),tags$br(),
+                                                  fluidRow(id='label','CS OVERVIEW'),tags$br(),
                                                   dataTableOutput("csStats")
                                                   ),
                                             column(7,offset=1,
-                                                  fluidRow(id='label','RE COMPLETION'),tags$br(),
+                                                  fluidRow(id='label','CS COMPLETION'),tags$br(),
                                                   plotOutput("csCompletionPlot")
                                                   )
                                           )),                  
