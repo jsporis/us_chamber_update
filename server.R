@@ -2,8 +2,8 @@
 
 shinyServer(function(input, output, session) {
 
-  
   source("data_load/set_up.R")
+  source("data_load/function.R")
   source("data_load/db_user_update.R")
   source("data_load/ga_data_load.R")
   source("data_load/db_erm_stats.R")
