@@ -180,6 +180,7 @@ shinyUI(
                                  tabPanel(span(id='tab','Event Stats'),
                                           tags$p(),
                                           fluidRow(id='label', 'EVENTS'), tags$br(),
+                                          downloadLink('participantList', 'DOWNLOAD FUTURE EVENT PARTICIPANT LIST CSV FILE'), tags$p(),
                                           dataTableOutput("vjsEventsStats")
                                           ),
                                  tabPanel(span(id='tab','Top Sources | Pages | States'),

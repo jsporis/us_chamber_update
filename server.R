@@ -130,6 +130,15 @@ output$vjsEventsStats <- renderDataTable(
   vjs_event_stats, options = list(bFilter = FALSE, bPaginate = FALSE, bAutoWidth = TRUE)
 )
 
+output$participantList <- downloadHandler(
+  filename = function() {
+    paste('vjs_event_participants', Sys.Date(), '.csv', sep="_")
+  },
+  content = function(file) {
+    write.csv(vjs_event_participants, file)
+  }
+)
+
 
 
 #### ga page path --------

@@ -16,3 +16,6 @@ vjs_overall_stats$value <- gsub('.00','', vjs_overall_stats$value)
 colnames(vjs_overall_stats) <- toupper(colnames(vjs_overall_stats))
 
 colnames(vjs_event_stats) <- toupper(colnames(vjs_event_stats))
+
+queryEventParticipant <- paste0(readLines('./sql/vjs_event_participants.sql', warn=FALSE), collapse=' ')
+vjs_event_participants <- RJDBC::dbGetQuery(conn,queryEventParticipant)
